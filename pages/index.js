@@ -40,9 +40,9 @@ export default function Home() {
       })
   }, [])
 
-  useEffect(() => {
-    newQuestion()
-  }, [newQuestion])
+  // useEffect(() => {
+  //   newQuestion()
+  // }, [newQuestion])
 
   const makeGuess = useCallback(() => {
     console.log({ guess1, guess2, guess3 })
@@ -68,18 +68,20 @@ export default function Home() {
 
   return (
     <div style={{ maxWidth: 512, margin: '0 auto' }}>
-      <h1>Who is this?</h1>
-      {loading ? 'Loading...' : (<>
-        <img src={image} alt="Image of a combination of three famous people" />
-        <PersonInput onChange={setGuess1} answers={ answers }/>
-        <PersonInput onChange={setGuess2} answers={ answers }/>
-        <PersonInput onChange={setGuess3} answers={ answers }/>
-        { answers && <div>{`Correct answers: ${answers.join(', ')}`}</div> }
-        <button onClick={makeGuess}>Guess</button>
-        <button onClick={newQuestion}>New Question</button>
-        {correct === true && <p>Correct!</p>}
-        {correct === false && <p>Wrong!</p>}
-      </>)}
+      { !loading && !image ? <button onClick={newQuestion}>Start</button> : <>
+        <h1>Who is this?</h1>
+        {loading ? 'Loading...' : (<>
+          <img src={image} alt="Image of a combination of three famous people" />
+          <PersonInput onChange={setGuess1} answers={ answers }/>
+          <PersonInput onChange={setGuess2} answers={ answers }/>
+          <PersonInput onChange={setGuess3} answers={ answers }/>
+          { answers && <div>{`Correct answers: ${answers.join(', ')}`}</div> }
+          <button onClick={makeGuess}>Guess</button>
+          <button onClick={newQuestion}>New Question</button>
+          {correct === true && <p>Correct!</p>}
+          {correct === false && <p>Wrong!</p>}
+        </>)}
+      </>}
     </div>
   )
 }
