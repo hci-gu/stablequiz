@@ -12,7 +12,7 @@ const PersonInput = ({ onChange, answers }) => {
           onChange(e.target.value)
         }}
       />
-      {answers && answers.includes(name) && <span>Correct!</span>}
+      {answers && answers.map(a => a.toLowerCase()).includes(name.toLowerCase()) && <span>Correct!</span>}
     </div>
   )
 }
