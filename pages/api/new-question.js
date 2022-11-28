@@ -1,4 +1,4 @@
-import { getQuestions, } from '../../components/questions'
+import { getQuestions } from '../../components/questions'
 
 export default async function handler(req, res) {
   const questions = await getQuestions()

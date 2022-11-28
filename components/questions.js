@@ -26,6 +26,10 @@ const getQuestion = (questionId) => {
   return questions.find(q => q.questionId === questionId)
 }
 
+const getQuestions = () => {
+  return loadQuestions()
+}
+
 const getNewQuestionId = () => {
   return loadQuestions().length
 }
@@ -34,4 +38,5 @@ export {
   addQuestion,
   getQuestion,
   getNewQuestionId,
+  getQuestions,
 }
