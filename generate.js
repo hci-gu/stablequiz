@@ -71,7 +71,7 @@ const getRandomThreePeople = (people) => {
     return getRandomThreePeople(people)
 }
 
-const npeople = 100
+const npeople = 1000
 const imgPath = path.join(process.cwd(), 'tmp')
 
 const main = async () => {
