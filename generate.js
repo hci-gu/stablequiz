@@ -101,7 +101,7 @@ const main = async () => {
 
     await downloadImage('http://leviathan.itit.gu.se:5000/combine', params, path.join(imgPath, filename))
 
-    console.log('downloaded image', filename, persons)
+    console.log('Downloaded image', filename, persons)
 
     // upload to aws
     const url = await uploadImageToS3(filename, fs.readFileSync(path.join(imgPath, filename)))
