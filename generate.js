@@ -5,7 +5,7 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const axios = require('axios')
 
-let people
+const uploadImageToS3 = require('./lib/upload-to-s3')
 
 const loadQuestions = () => {
   let data
@@ -27,9 +27,22 @@ const addQuestion = (question) => {
   saveQuestions(questions)
 }
 
-// for each person i people, make a web request
-// to https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&piprop=original&titles=person
-// and save the image url to components/images/person.json
+const loadPeople = async () => {
+  let people
+  try {
+    people = fs.readFileSync(path.join(process.cwd(), 'people.txt'), 'utf8').split('\n')
+
+    // remove empty lines
+    people = people.filter(p => p.length > 0)
+
+    // remove duplicates
+    people = [...new Set(people)]
+  } catch (e) {
+    console.error(e)
+    process.exit(-1)
+  }
+  return people
+}
 
 // function that downloads an image from url and saves to a file
 function downloadImage(url, params, filename) {
@@ -43,32 +56,33 @@ function downloadImage(url, params, filename) {
   })
 }
 
-const npeople = 5
+const getRandomThreePeople = (people) => {
+  const person1 = people[Math.floor(Math.random() * people.length)]
+  const person2 = people[Math.floor(Math.random() * people.length)]
+  const person3 = people[Math.floor(Math.random() * people.length)]
+  let persons = [person1, person2, person3]
+
+  // remove duplicates
+  persons = [...new Set(persons)]
+
+  if (persons.length === 3)
+    return persons
+  else
+    return getRandomThreePeople(people)
+}
+
+const npeople = 100
 const imgPath = path.join(process.cwd(), 'tmp')
 
 const main = async () => {
-  try {
-    people = fs.readFileSync(path.join(process.cwd(), 'people.txt'), 'utf8').split('\n')
-  
-    // remove empty lines
-    people = people.filter(p => p.length > 0)
-  
-    // remove duplicates
-    people = [...new Set(people)]
-  } catch (e) {
-    console.error(e)
-    process.exit(-1)
-  }
-  
+  const people = await loadPeople()
+   
   // write people to components/people.json
   fs.writeFileSync(path.join(process.cwd(), 'components', 'people.json'), JSON.stringify(people))
 
   for (let i=0;i<npeople;i++) {
     // generate a list of random three people
-    const person1 = people[Math.floor(Math.random() * people.length)]
-    const person2 = people[Math.floor(Math.random() * people.length)]
-    const person3 = people[Math.floor(Math.random() * people.length)]
-    const persons = [person1, person2, person3]
+    const persons = getRandomThreePeople(people)
 
     // get uuid for this question
     const id = uuidv4()
@@ -90,8 +104,10 @@ const main = async () => {
     console.log('downloaded image', filename, persons)
 
     // upload to aws
-    
-    params.image = imageUrl
+    const url = await uploadImageToS3(filename, fs.readFileSync(path.join(imgPath, filename)))
+    params.image = url
+
+    console.log('Uploaded image to AWS', url)
 
     // add to database
     addQuestion(params)
