@@ -4,7 +4,9 @@ import path from 'path'
 const loadQuestions = () => {
   let data
   try {
-    data = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'questions.json')))
+    data = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), 'questions.json'))
+    )
   } catch (e) {
     data = []
   }
@@ -12,7 +14,10 @@ const loadQuestions = () => {
 }
 
 const saveQuestions = (questions) => {
-  fs.writeFileSync(path.join(process.cwd(), 'questions.json'), JSON.stringify(questions))
+  fs.writeFileSync(
+    path.join(process.cwd(), 'questions.json'),
+    JSON.stringify(questions)
+  )
 }
 
 const addQuestion = (question) => {
@@ -23,7 +28,7 @@ const addQuestion = (question) => {
 
 const getQuestion = (questionId) => {
   const questions = loadQuestions()
-  return questions.find(q => q.questionId === questionId)
+  return questions.find((q) => q.questionId === questionId)
 }
 
 const getQuestions = () => {
@@ -34,9 +39,4 @@ const getNewQuestionId = () => {
   return loadQuestions().length
 }
 
-export {
-  addQuestion,
-  getQuestion,
-  getNewQuestionId,
-  getQuestions,
-}
+export { addQuestion, getQuestion, getNewQuestionId, getQuestions }

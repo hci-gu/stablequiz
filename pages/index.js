@@ -1,87 +1,26 @@
-import { useState, useEffect, useCallback } from 'react'
+import { Button, Center, Flex, Title } from '@mantine/core'
+import { useRouter } from 'next/router'
 
-const PersonInput = ({ onChange, answers }) => {
-  const [name, setName] = useState('')
-  return (
-    <div>
-      <input
-        type="text"
-        value={name}
-        onChange={e => {
-          setName(e.target.value)
-          onChange(e.target.value)
-        }}
-      />
-      {answers && answers.map(a => a.toLowerCase()).includes(name.toLowerCase()) && <span>Correct!</span>}
-    </div>
-  )
-}
-
-export default function Home() {
-  const [questionId, setQuestionId] = useState(undefined)
-  const [image, setImage] = useState(null)
-  const [guess1, setGuess1] = useState('')
-  const [guess2, setGuess2] = useState('')
-  const [guess3, setGuess3] = useState('')
-  const [correct, setCorrect] = useState(undefined)
-  const [answers, setAnswers] = useState(undefined)
-  const [loading, setLoading] = useState(false)
-
-  const newQuestion = useCallback(() => {
-    setAnswers(undefined)
-    setCorrect(undefined)
-    setLoading(true)
-    fetch('/api/new-question')
-      .then(res => res.json())
-      .then(data => {
-        setLoading(false)
-        setImage(data.image)
-        setQuestionId(data.questionId)
-      })
-  }, [])
-
-  // useEffect(() => {
-  //   newQuestion()
-  // }, [newQuestion])
-
-  const makeGuess = useCallback(() => {
-    console.log({ guess1, guess2, guess3 })
-    fetch('/api/submit-answer', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        questionId,
-        guess1,
-        guess2,
-        guess3,
-      }),
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log({ data })
-      setCorrect(data.correct)
-      setAnswers(data.answers)
-    })
-  }, [questionId, guess1, guess2, guess3])
+export default function Index() {
+  const router = useRouter()
+  const start = async () => {
+    const response = await (await fetch('/api/new-question')).json()
+    router.push(`/question/${response.questionId}`)
+  }
 
   return (
-    <div style={{ maxWidth: 512, margin: '0 auto' }}>
-      { !loading && !image ? <button onClick={newQuestion}>Start</button> : <>
-        <h1>Who is this?</h1>
-        {loading ? 'Loading...' : (<>
-          <img src={image} alt="Image of a combination of three famous people" />
-          <PersonInput onChange={setGuess1} answers={ answers }/>
-          <PersonInput onChange={setGuess2} answers={ answers }/>
-          <PersonInput onChange={setGuess3} answers={ answers }/>
-          { answers && <div>{`Correct answers: ${answers.join(', ')}`}</div> }
-          <button onClick={makeGuess}>Guess</button>
-          <button onClick={newQuestion}>New Question</button>
-          {correct === true && <p>Correct!</p>}
-          {correct === false && <p>Wrong!</p>}
-        </>)}
-      </>}
-    </div>
+    <Center>
+      <Flex direction="column" gap={0} align="center">
+        <Title order={1} size={96}>
+          Who am <span style={{ fontSize: 32 }}>A</span>I?
+        </Title>
+        <Title order={2} weight={400}>
+          Guess which <strong>three</strong> people an AI generated image is.
+        </Title>
+        <Button mt="lg" size="lg" onClick={start}>
+          Start
+        </Button>
+      </Flex>
+    </Center>
   )
 }
