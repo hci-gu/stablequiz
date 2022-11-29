@@ -6,6 +6,7 @@ import {
   MantineProvider,
   useMantineColorScheme,
 } from '@mantine/core'
+import { Analytics } from '@vercel/analytics/react'
 import { IconMoonStars, IconSun } from '@tabler/icons'
 import { useState } from 'react'
 
@@ -63,6 +64,7 @@ function MyApp({ Component, pageProps }) {
           </Layout>
         </MantineProvider>
       </ColorSchemeProvider>
+      <Analytics />
     </>
   )
 }
