@@ -1,4 +1,14 @@
-import { Button, Center, Flex, Image, Select, Text, Title } from '@mantine/core'
+import {
+  Anchor,
+  Button,
+  Center,
+  Container,
+  Flex,
+  MediaQuery,
+  Select,
+  Text,
+  Title,
+} from '@mantine/core'
 import { useRef, useState } from 'react'
 import Confetti from 'react-confetti'
 import { IconCheck, IconClipboard } from '@tabler/icons'
@@ -6,6 +16,7 @@ import { useRouter } from 'next/router'
 import people from '../../people.json'
 import { getQuestion } from '../../lib/questions'
 import Head from 'next/head'
+import Image from 'next/image'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -133,27 +144,23 @@ export default function Question({ question, people = [] }) {
         {isCorrect && <Confetti recycle={false} />}
         <Flex direction="column" gap="md" align="center">
           <Center>
-            <Title order={1} size={32}>
-              WHO AM <span style={{ fontSize: 16 }}>A</span>I?
-            </Title>
+            <Anchor style={{ color: '#000' }} href="/">
+              <Title order={1} size={32}>
+                WHO AM <span style={{ fontSize: 16 }}>A</span>I?
+              </Title>
+            </Anchor>
           </Center>
-          <Image
-            src={question.image}
-            radius="md"
-            withPlaceholder
-            sx={{
-              width: '512px',
-              height: 'auto',
-              '@media (max-width: 1540px)': {
-                width: '468px !important',
-                height: 'auto',
-              },
-              '@media (max-width: 755px)': {
-                width: '100% !important',
-                height: 'auto',
-              },
-            }}
-          />
+          <MediaQuery
+            query="(max-width: 768px)"
+            styles={{ width: '90vw', height: 'auto' }}
+          >
+            <Image
+              src={question.image}
+              width={512}
+              height={512}
+              style={{ borderRadius: 16 }}
+            />
+          </MediaQuery>
           <Flex
             gap="xs"
             direction={{

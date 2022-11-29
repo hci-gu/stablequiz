@@ -35,8 +35,23 @@ const Layout = ({ children }) => {
   return (
     <AppShell
       footer={
-        <Footer p="sm" style={{ fontSize: 13 }}>
-          <Flex>
+        <Footer
+          p="sm"
+          style={{ fontSize: 13 }}
+          sx={{
+            '@media (max-width: 755px)': {
+              padding: '8px',
+              fontSize: '11px !important',
+            },
+          }}
+        >
+          <Flex
+            sx={{
+              '@media (max-width: 755px)': {
+                justifyContent: 'center',
+              },
+            }}
+          >
             Made by
             <Anchor href="https://twitter.com/rrostt" target="_blank" mx={4}>
               @rrostt
