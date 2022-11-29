@@ -4,6 +4,7 @@ import {
   Center,
   Container,
   Flex,
+  Image,
   MediaQuery,
   Select,
   Text,
@@ -16,7 +17,6 @@ import { useRouter } from 'next/router'
 import people from '../../people.json'
 import { getQuestion } from '../../lib/questions'
 import Head from 'next/head'
-import Image from 'next/image'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -150,17 +150,20 @@ export default function Question({ question, people = [] }) {
               </Title>
             </Anchor>
           </Center>
-          <MediaQuery
-            query="(max-width: 768px)"
-            styles={{ width: '90vw', height: 'auto' }}
-          >
-            <Image
-              src={question.image}
-              width={512}
-              height={512}
-              style={{ borderRadius: 16 }}
-            />
-          </MediaQuery>
+          <Image
+            src={question.image}
+            radius="lg"
+            sx={{
+              width: '512px',
+              height: 'auto',
+              '@media (max-width: 1540px)': {
+                width: '468px !important',
+              },
+              '@media (max-width: 768px)': {
+                width: '100% !important',
+              },
+            }}
+          />
           <Flex
             gap="xs"
             direction={{
