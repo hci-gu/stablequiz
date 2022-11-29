@@ -1,15 +1,7 @@
-import {
-  Button,
-  Center,
-  Container,
-  Flex,
-  Image,
-  Select,
-  Text,
-} from '@mantine/core'
-import { useState } from 'react'
+import { Button, Center, Flex, Image, Select, Text, Title } from '@mantine/core'
+import { useRef, useState } from 'react'
 import Confetti from 'react-confetti'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck, IconClipboard } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import people from '../../people.json'
 import { getQuestion } from '../../lib/questions'
@@ -76,6 +68,7 @@ const initialState = () => [
 ]
 
 export default function Question({ question, people = [] }) {
+  const clipboardButtonRef = useRef()
   const router = useRouter()
   const [guesses, setGuesses] = useState(initialState())
 
@@ -139,6 +132,11 @@ export default function Question({ question, people = [] }) {
       <Center>
         {isCorrect && <Confetti recycle={false} />}
         <Flex direction="column" gap="md" align="center">
+          <Center>
+            <Title order={1} size={32}>
+              WHO AM <span style={{ fontSize: 16 }}>A</span>I?
+            </Title>
+          </Center>
           <Image
             src={question.image}
             radius="md"
@@ -178,20 +176,42 @@ export default function Question({ question, people = [] }) {
               />
             ))}
           </Flex>
-          {isDone ? (
-            <Button onClick={next}>
-              {isCorrect ? 'Next person' : 'New person'}
-            </Button>
-          ) : (
-            <Button onClick={submit} disabled={!guesses.every((g) => g.value)}>
-              Submit
-            </Button>
-          )}
-          {!isDone && (
-            <Button onClick={submit} variant="outline">
-              Give up
-            </Button>
-          )}
+          <Flex gap="xs">
+            {!isDone && (
+              <Button onClick={submit} variant="outline">
+                Give up
+              </Button>
+            )}
+            {isDone ? (
+              <Button onClick={next}>
+                {isCorrect ? 'Next person' : 'New person'}
+              </Button>
+            ) : (
+              <Button
+                onClick={submit}
+                disabled={!guesses.every((g) => g.value)}
+              >
+                Submit
+              </Button>
+            )}
+          </Flex>
+
+          <Button
+            variant="subtle"
+            leftIcon={<IconClipboard />}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `https://whoamai.appadem.in/question/${question.questionId}`
+              )
+              let originalText = clipboardButtonRef.current.innerText
+              clipboardButtonRef.current.innerText = 'Copied!'
+              setTimeout(() => {
+                clipboardButtonRef.current.innerText = originalText
+              }, 2000)
+            }}
+          >
+            <span ref={clipboardButtonRef}>Copy link to person</span>
+          </Button>
         </Flex>
       </Center>
     </>

@@ -1,14 +1,19 @@
 import Head from 'next/head'
 import {
   ActionIcon,
+  Anchor,
+  AppShell,
   ColorSchemeProvider,
   Container,
+  Flex,
+  Footer,
   MantineProvider,
   useMantineColorScheme,
 } from '@mantine/core'
 import { Analytics } from '@vercel/analytics/react'
 import { IconMoonStars, IconSun } from '@tabler/icons'
 import { useState } from 'react'
+import { css, Global } from '@emotion/react'
 
 const DarkMode = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -28,12 +33,35 @@ const DarkMode = () => {
 
 const Layout = ({ children }) => {
   return (
-    <>
-      <Container pos="absolute" right={0} mt={4}>
+    <AppShell
+      footer={
+        <Footer p="sm" style={{ fontSize: 13 }}>
+          <Flex>
+            Made by
+            <Anchor href="https://twitter.com/rrostt" target="_blank" mx={4}>
+              @rrostt
+            </Anchor>
+            and
+            <Anchor
+              href="https://twitter.com/Sebasti_Andreas"
+              target="_blank"
+              mx={4}
+            >
+              @sebasti_andreas
+            </Anchor>
+            from
+            <Anchor href="https://hci.gu.se/appademin" target="_blank" mx={4}>
+              Appademin
+            </Anchor>
+          </Flex>
+        </Footer>
+      }
+    >
+      <Container pos="absolute" right={0} mt={0}>
         <DarkMode />
       </Container>
-      <div style={{ margin: '32px auto', width: '95%' }}>{children}</div>
-    </>
+      <Container pb={64}>{children}</Container>
+    </AppShell>
   )
 }
 
@@ -41,6 +69,17 @@ function MyApp({ Component, pageProps }) {
   const [colorScheme, setColorScheme] = useState('light')
   return (
     <>
+      <Global
+        styles={css`
+          @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select:focus,
+            textarea:focus,
+            input:focus {
+              font-size: 16px;
+            }
+          }
+        `}
+      />
       <Head>
         <title>Page title</title>
         <meta
