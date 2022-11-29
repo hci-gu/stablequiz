@@ -189,7 +189,7 @@ export default function Question({ question, people = [] }) {
             )}
           </Flex>
 
-          {/* <CopyLinkButton /> */}
+          <CopyLinkButton questionId={question.questionId}/>
         </Flex>
       </Center>
     </>
