@@ -8,16 +8,15 @@ import {
   Text,
 } from '@mantine/core'
 import { useState } from 'react'
-import { getQuestion } from '../../components/questions'
 import Confetti from 'react-confetti'
 import { IconCheck } from '@tabler/icons'
 import { useRouter } from 'next/router'
-import { getPeople } from '../../components/people'
+import people from '../../people.json'
+import { getQuestion } from '../../lib/questions'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
   const question = await getQuestion(id)
-  const people = await getPeople()
 
   if (!question) {
     return {
@@ -36,7 +35,6 @@ export async function getServerSideProps(context) {
 }
 
 const GuessInput = ({ people, guess, onChange }) => {
-  console.log(guess.value)
   return (
     <Flex direction="column">
       <Select

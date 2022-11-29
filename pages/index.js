@@ -1,9 +1,12 @@
 import { Button, Center, Flex, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function Index() {
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const start = async () => {
+    setLoading(true)
     const response = await (await fetch('/api/new-question')).json()
     router.push(`/question/${response.questionId}`)
   }
@@ -17,7 +20,7 @@ export default function Index() {
         <Title order={2} weight={400}>
           Guess which <strong>three</strong> people an AI generated image is.
         </Title>
-        <Button mt="lg" size="lg" onClick={start}>
+        <Button mt="lg" size="lg" onClick={start} loading={loading}>
           Start
         </Button>
       </Flex>
