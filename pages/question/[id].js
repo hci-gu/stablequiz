@@ -1,4 +1,12 @@
-import { Button, Center, Flex, Image, Select, Text } from '@mantine/core'
+import {
+  Button,
+  Center,
+  Container,
+  Flex,
+  Image,
+  Select,
+  Text,
+} from '@mantine/core'
 import { useState } from 'react'
 import { getQuestion } from '../../components/questions'
 import Confetti from 'react-confetti'
@@ -30,7 +38,7 @@ export async function getServerSideProps(context) {
 const GuessInput = ({ people, guess, onChange }) => {
   console.log(guess.value)
   return (
-    <Flex direction="column" gap="xs">
+    <Flex direction="column">
       <Select
         sx={{
           '> div > div > input': {
@@ -71,7 +79,7 @@ export default function Question({ question, people = [] }) {
   const isCorrect = guesses.every((guess) => guess.correct)
   const isDone = guesses.every((guess) => guess.answer)
 
-  const submit = async () => {
+  const submit = async (submittedGuesses) => {
     const response = await fetch('/api/submit-answer', {
       method: 'POST',
       headers: {
@@ -79,9 +87,9 @@ export default function Question({ question, people = [] }) {
       },
       body: JSON.stringify({
         questionId: question.questionId,
-        guess1: guesses[0].value,
-        guess2: guesses[1].value,
-        guess3: guesses[2].value,
+        guess1: [0].value ?? '',
+        guess2: [1].value ?? '',
+        guess3: [2].value ?? '',
       }),
     })
     const data = await response.json()
@@ -116,8 +124,25 @@ export default function Question({ question, people = [] }) {
     <Center>
       {isCorrect && <Confetti recycle={false} />}
       <Flex direction="column" gap="md" align="center">
-        <Image src={question.image} width={512} height={512} radius="md" />
-        <Flex gap="md">
+        <Image
+          src={question.image}
+          radius="md"
+          sx={{
+            width: '512px',
+            height: 'auto',
+            '@media (max-width: 755px)': {
+              width: '100%',
+              height: 'auto',
+            },
+          }}
+        />
+        <Flex
+          gap="xs"
+          direction={{
+            base: 'column',
+            sm: 'row',
+          }}
+        >
           {guesses.map((guess, index) => (
             <GuessInput
               key={`GuessInput_${index}`}
@@ -139,6 +164,11 @@ export default function Question({ question, people = [] }) {
         ) : (
           <Button onClick={submit} disabled={!guesses.every((g) => g.value)}>
             Submit
+          </Button>
+        )}
+        {!isDone && (
+          <Button onClick={submit} variant="outline">
+            Give up
           </Button>
         )}
       </Flex>
