@@ -30,8 +30,8 @@ export default function Index() {
           property="og:image"
           content="https://whoamai.appadem.in/images/share.png"
         />
-        <meta property="og:image:width" content={512} />
-        <meta property="og:image:height" content={502} />
+        <meta property="og:image:width" content={1200} />
+        <meta property="og:image:height" content={627} />
       </Head>
       <Center>
         <Flex direction="column" gap={0} align="center" mt={128}>
