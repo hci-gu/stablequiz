@@ -9,6 +9,7 @@ const nextConfig = {
         port: '',
       },
     ],
+    domains: ['whoamai.s3.eu-central-1.amazonaws.com'],
   },
 }
 
