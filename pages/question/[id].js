@@ -94,9 +94,9 @@ export default function Question({ question, people = [] }) {
       },
       body: JSON.stringify({
         questionId: question.questionId,
-        guess1: [0].value ?? '',
-        guess2: [1].value ?? '',
-        guess3: [2].value ?? '',
+        guess1: guesses[0].value ?? '',
+        guess2: guesses[1].value ?? '',
+        guess3: guesses[2].value ?? '',
       }),
     })
     const data = await response.json()
