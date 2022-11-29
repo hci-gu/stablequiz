@@ -1,4 +1,4 @@
-import { getQuestion } from '../../components/questions'
+import { getQuestion } from '../../lib/questions'
 
 export default async function handler(req, res) {
   const questionId = req.body.questionId
@@ -6,8 +6,11 @@ export default async function handler(req, res) {
   const guess2 = req.body.guess2.toLowerCase()
   const guess3 = req.body.guess3.toLowerCase()
   const question = getQuestion(questionId)
-  const answers = question.people.map(p => p.toLowerCase())
-  const correct = [...new Set([guess1, guess2, guess3])].filter(answer => answers.includes(answer)).length == 3
+  const answers = question.people.map((p) => p.toLowerCase())
+  const correct =
+    [...new Set([guess1, guess2, guess3])].filter((answer) =>
+      answers.includes(answer)
+    ).length == 3
 
   res.status(200).json({
     correct,

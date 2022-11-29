@@ -13,6 +13,7 @@ import { IconCheck } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import people from '../../people.json'
 import { getQuestion } from '../../lib/questions'
+import Head from 'next/head'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -34,7 +35,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-const GuessInput = ({ people, guess, onChange }) => {
+const GuessInput = ({ people, label, guess, onChange }) => {
   return (
     <Flex direction="column">
       <Select
@@ -44,13 +45,17 @@ const GuessInput = ({ people, guess, onChange }) => {
           },
         }}
         icon={guess.correct ? <IconCheck color="#40C057" /> : undefined}
-        label="Person"
+        label={label}
         placeholder="Name"
         searchable
         clearable
         onChange={onChange}
         value={guess.value}
         error={guess.correct === false}
+        filter={(value, item) => {
+          if (value.length < 3) return false
+          return item.label.toLowerCase().includes(value.toLowerCase().trim())
+        }}
         data={people.map((value) => ({ value, label: value }))}
       />
       <Text>
@@ -77,7 +82,7 @@ export default function Question({ question, people = [] }) {
   const isCorrect = guesses.every((guess) => guess.correct)
   const isDone = guesses.every((guess) => guess.answer)
 
-  const submit = async (submittedGuesses) => {
+  const submit = async () => {
     const response = await fetch('/api/submit-answer', {
       method: 'POST',
       headers: {
@@ -119,57 +124,74 @@ export default function Question({ question, people = [] }) {
   }
 
   return (
-    <Center>
-      {isCorrect && <Confetti recycle={false} />}
-      <Flex direction="column" gap="md" align="center">
-        <Image
-          src={question.image}
-          radius="md"
-          sx={{
-            width: '512px',
-            height: 'auto',
-            '@media (max-width: 755px)': {
-              width: '100%',
-              height: 'auto',
-            },
-          }}
+    <>
+      <Head>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Who am aI?" />
+        <meta
+          property="og:description"
+          content="Guess which three people aI am."
         />
-        <Flex
-          gap="xs"
-          direction={{
-            base: 'column',
-            sm: 'row',
-          }}
-        >
-          {guesses.map((guess, index) => (
-            <GuessInput
-              key={`GuessInput_${index}`}
-              people={people}
-              guess={guess}
-              onChange={(value) => {
-                guesses[index] = {
-                  value,
-                }
-                setGuesses([...guesses])
-              }}
-            />
-          ))}
+        <meta property="og:image" content={question.image} />
+      </Head>
+      <Center>
+        {isCorrect && <Confetti recycle={false} />}
+        <Flex direction="column" gap="md" align="center">
+          <Image
+            src={question.image}
+            radius="md"
+            withPlaceholder
+            sx={{
+              width: '512px',
+              height: 'auto',
+              '@media (max-width: 1540px)': {
+                width: '468px !important',
+                height: 'auto',
+              },
+              '@media (max-width: 755px)': {
+                width: '100% !important',
+                height: 'auto',
+              },
+            }}
+          />
+          <Flex
+            gap="xs"
+            direction={{
+              base: 'column',
+              sm: 'row',
+            }}
+          >
+            {guesses.map((guess, index) => (
+              <GuessInput
+                key={`GuessInput_${index}`}
+                label={`Person ${index + 1}`}
+                people={people}
+                guess={guess}
+                onChange={(value) => {
+                  guesses[index] = {
+                    value,
+                  }
+                  setGuesses([...guesses])
+                }}
+              />
+            ))}
+          </Flex>
+          {isDone ? (
+            <Button onClick={next}>
+              {isCorrect ? 'Next person' : 'New person'}
+            </Button>
+          ) : (
+            <Button onClick={submit} disabled={!guesses.every((g) => g.value)}>
+              Submit
+            </Button>
+          )}
+          {!isDone && (
+            <Button onClick={submit} variant="outline">
+              Give up
+            </Button>
+          )}
         </Flex>
-        {isDone ? (
-          <Button onClick={next}>
-            {isCorrect ? 'Next person' : 'New person'}
-          </Button>
-        ) : (
-          <Button onClick={submit} disabled={!guesses.every((g) => g.value)}>
-            Submit
-          </Button>
-        )}
-        {!isDone && (
-          <Button onClick={submit} variant="outline">
-            Give up
-          </Button>
-        )}
-      </Flex>
-    </Center>
+      </Center>
+    </>
   )
 }
