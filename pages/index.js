@@ -30,6 +30,7 @@ export default function Index() {
           property="og:image"
           content="https://whoamai.appadem.in/images/share.png"
         />
+        <meta property="og:url" content="https://whoamai.appadem.in/" />
         <meta property="og:image:width" content={1200} />
         <meta property="og:image:height" content={627} />
       </Head>

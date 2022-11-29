@@ -105,6 +105,10 @@ export default function Question({ question, people = [] }) {
         <meta property="og:image" content={question.image} />
         <meta property="og:image:width" content={512} />
         <meta property="og:image:height" content={512} />
+        <meta
+          property="og:url"
+          content={`https://whoamai.appadem.in/question/${question.id}`}
+        />
       </Head>
       <Center>
         {isCorrect && <Confetti recycle={false} />}
