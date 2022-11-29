@@ -1,29 +1,21 @@
 Abraham Lincoln
 George Washington
-Benjamin Franklin
-Thomas Jefferson
 John F. Kennedy
 Martin Luther King, Jr.
 Marilyn Monroe
 Elvis Presley
 Muhammad Ali
 Michael Jordan
-Babe Ruth
 Albert Einstein
 Oprah Winfrey
 Nelson Mandela
 Franklin D. Roosevelt
 John Lennon
 Bill Clinton
-Christopher Columbus
-Amelia Earhart
-Marco Polo
-George Washington Carver
 Thomas Edison
 Neil Armstrong
 Marie Curie
 Rosa Parks
-Dr. Seuss
 Walt Disney
 James Cameron
 Steven Spielberg
@@ -61,7 +53,6 @@ Mariah Carey
 Celine Dion
 Barbra Streisand
 Michael Bublé
-Andrea Bocelli
 Tom Hanks
 Oprah Winfrey
 George Clooney
@@ -71,7 +62,6 @@ Beyonce
 Jay-Z
 Lionel Messi
 Cristiano Ronaldo
-Neymar
 Warren Buffett
 Mark Zuckerberg
 Jeff Bezos
@@ -103,16 +93,39 @@ Kanye West
 Kim Kardashian
 David Beckham
 Lionel Messi
-Pele
-Diego Maradona
-Zinedine Zidane
 Usain Bolt
 Michael Phelps
 Serena Williams
 Novak Djokovic
-Roger Federer
-Rafael Nadal
 Andy Murray
 Kobe Bryant
-Kevin Durant
-Stephen Curry
+Elon Musk
+Joe Biden
+Robert Downey Jr.
+Will Smith
+Ben Affleck
+Billie Eilish
+Britney Spears
+Bruce Willis
+Cardi B
+Cher
+Chris Evans
+Donald Trump
+Dua Lipa
+Ed Sheeran
+Ellen Degeneres
+Harrison Ford
+Harry Styles
+Howard Stern
+Jennifer Aniston
+Jennifer Lawrence
+Jerry Seinfeld
+Johnny Depp
+Julia Roberts
+Keanu Reeves
+Kevin Hart
+Leonardo DiCaprio
+Mel Gibson
+Robert De Niro
+Sandra Bullock
+Simon Cowell
