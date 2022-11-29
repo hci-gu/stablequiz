@@ -21,6 +21,7 @@
     "dotenv": "^16.0.3",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",
+    "ioredis": "^5.2.4",
     "jotai": "^1.10.0",
     "leva": "^0.9.34",
     "next": "13.0.4",

@@ -133,6 +133,8 @@ export default function Question({ question, people = [] }) {
           content="Guess which three people aI am."
         />
         <meta property="og:image" content={question.image} />
+        <meta property="og:image:width" content={512} />
+        <meta property="og:image:height" content={512} />
       </Head>
       <Center>
         {isCorrect && <Confetti recycle={false} />}
