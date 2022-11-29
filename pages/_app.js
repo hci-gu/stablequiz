@@ -86,7 +86,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Global
         styles={css`
-          @media screen and (-webkit-min-device-pixel-ratio: 0) {
+          @media screen and (-webkit-min-device-pixel-ratio: 0) and (max-width: 768px) {
             select:focus,
             textarea:focus,
             input:focus {
