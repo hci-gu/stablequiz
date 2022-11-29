@@ -5,18 +5,17 @@ import {
   Container,
   Flex,
   Image,
-  MediaQuery,
-  Select,
-  Text,
+  LoadingOverlay,
   Title,
 } from '@mantine/core'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import Confetti from 'react-confetti'
-import { IconCheck, IconClipboard } from '@tabler/icons'
 import { useRouter } from 'next/router'
 import people from '../../people.json'
 import { getQuestion } from '../../lib/questions'
 import Head from 'next/head'
+import GuessInput from '../../components/GuessInput'
+import CopyLinkButton from '../../components/CopyLinkButton'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -38,40 +37,6 @@ export async function getServerSideProps(context) {
   }
 }
 
-const GuessInput = ({ people, label, guess, onChange }) => {
-  return (
-    <Flex direction="column">
-      <Select
-        sx={{
-          '> div > div > input': {
-            border: guess.correct ? '1px solid #40C057' : '',
-          },
-        }}
-        icon={guess.correct ? <IconCheck color="#40C057" /> : undefined}
-        label={label}
-        placeholder="Name"
-        searchable
-        clearable
-        onChange={onChange}
-        value={guess.value}
-        error={guess.correct === false}
-        filter={(value, item) => {
-          if (value.length < 3) return false
-          return item.label.toLowerCase().includes(value.toLowerCase().trim())
-        }}
-        data={people.map((value) => ({ value, label: value }))}
-      />
-      <Text>
-        {guess.answer && !guess.correct && (
-          <>
-            <strong>Correct:</strong> {guess.answer}
-          </>
-        )}
-      </Text>
-    </Flex>
-  )
-}
-
 const initialState = () => [
   { value: null, correct: null },
   { value: null, correct: null },
@@ -79,8 +44,8 @@ const initialState = () => [
 ]
 
 export default function Question({ question, people = [] }) {
-  const clipboardButtonRef = useRef()
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const [guesses, setGuesses] = useState(initialState())
 
   const isCorrect = guesses.every((guess) => guess.correct)
@@ -122,6 +87,7 @@ export default function Question({ question, people = [] }) {
   }
 
   const next = async () => {
+    setLoading(true)
     const response = await (await fetch('/api/new-question')).json()
     router.push(`/question/${response.questionId}`)
     setGuesses(initialState())
@@ -144,18 +110,16 @@ export default function Question({ question, people = [] }) {
         {isCorrect && <Confetti recycle={false} />}
         <Flex direction="column" gap="md" align="center">
           <Center>
-            <Anchor style={{ color: '#000' }} href="/">
+            <Anchor href="/" variant="text">
               <Title order={1} size={32}>
                 WHO AM <span style={{ fontSize: 16 }}>A</span>I?
               </Title>
             </Anchor>
           </Center>
-          <Image
-            src={question.image}
-            radius="lg"
+          <Container
             sx={{
-              width: '512px',
-              height: 'auto',
+              width: 512,
+              position: 'relative',
               '@media (max-width: 1540px)': {
                 width: '468px !important',
               },
@@ -163,7 +127,22 @@ export default function Question({ question, people = [] }) {
                 width: '100% !important',
               },
             }}
-          />
+          >
+            <Image
+              src={question.image}
+              radius="lg"
+              withPlaceholder
+              onLoad={() => setLoading(false)}
+            />
+            <LoadingOverlay
+              visible={loading}
+              w="100%"
+              h="100%"
+              loaderProps={{
+                variant: 'bars',
+              }}
+            />
+          </Container>
           <Flex
             gap="xs"
             direction={{
@@ -206,22 +185,7 @@ export default function Question({ question, people = [] }) {
             )}
           </Flex>
 
-          <Button
-            variant="subtle"
-            leftIcon={<IconClipboard />}
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `https://whoamai.appadem.in/question/${question.questionId}`
-              )
-              let originalText = clipboardButtonRef.current.innerText
-              clipboardButtonRef.current.innerText = 'Copied!'
-              setTimeout(() => {
-                clipboardButtonRef.current.innerText = originalText
-              }, 2000)
-            }}
-          >
-            <span ref={clipboardButtonRef}>Copy link to person</span>
-          </Button>
+          <CopyLinkButton />
         </Flex>
       </Center>
     </>
