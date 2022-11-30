@@ -78,9 +78,10 @@ const main = async () => {
   const people = await loadPeople()
    
   // write people to components/people.json
-  fs.writeFileSync(path.join(process.cwd(), 'components', 'people.json'), JSON.stringify(people))
+  fs.writeFileSync(path.join(process.cwd(), 'people.json'), JSON.stringify(people))
 
   for (let i=0;i<npeople;i++) {
+    console.log('Generating image', i)
     // generate a list of random three people
     const persons = getRandomThreePeople(people)
 
