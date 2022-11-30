@@ -1,11 +1,23 @@
 Abraham Lincoln
+George Washington
+John F. Kennedy
+Martin Luther King, Jr.
 Marilyn Monroe
 Elvis Presley
+Muhammad Ali
+Michael Jordan
 Albert Einstein
 Oprah Winfrey
 Nelson Mandela
+Franklin D. Roosevelt
 John Lennon
-Hillary Clinton
+Bill Clinton
+Thomas Edison
+Neil Armstrong
+Marie Curie
+Rosa Parks
+Walt Disney
+James Cameron
 Steven Spielberg
 George Lucas
 J.K. Rowling
@@ -16,18 +28,23 @@ Miley Cyrus
 Justin Bieber
 Taylor Swift
 Katy Perry
-Beyonce
+Beyoncé
 Jennifer Lopez
 Madonna
+Elvis Presley
 Michael Jackson
+Taylor Swift
 Kanye West
 Drake
 Adele
 Rihanna
 Justin Timberlake
+Bruno Mars
 Eminem
 Lady Gaga
+Katy Perry
 Ed Sheeran
+Taylor Swift
 Bob Dylan
 Bruce Springsteen
 David Bowie
@@ -35,17 +52,27 @@ Whitney Houston
 Mariah Carey
 Celine Dion
 Barbra Streisand
+Michael Bublé
 Tom Hanks
+Oprah Winfrey
 George Clooney
 Angelina Jolie
 Brad Pitt
+Beyonce
+Jay-Z
 Lionel Messi
 Cristiano Ronaldo
 Warren Buffett
 Mark Zuckerberg
 Jeff Bezos
 Vladimir Putin
+Pope Francis
 Dalai Lama
+Bill Clinton
+George W. Bush
+John McCain
+Jimmy Carter
+Nelson Mandela
 Margaret Thatcher
 Steve Jobs
 Michael Jordan
@@ -66,14 +93,17 @@ Kanye West
 Kim Kardashian
 David Beckham
 Lionel Messi
+Usain Bolt
 Michael Phelps
 Serena Williams
+Novak Djokovic
 Andy Murray
 Kobe Bryant
 Elon Musk
 Joe Biden
 Robert Downey Jr.
 Will Smith
+Ben Affleck
 Billie Eilish
 Britney Spears
 Bruce Willis
