@@ -16,6 +16,7 @@ import { getQuestion } from '../../lib/questions'
 import Head from 'next/head'
 import GuessInput from '../../components/GuessInput'
 import CopyLinkButton from '../../components/CopyLinkButton'
+import { getLocalCounterAndIncrement } from '../../lib/utils'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -88,7 +89,8 @@ export default function Question({ question, people = [] }) {
 
   const next = async () => {
     setLoading(true)
-    const response = await (await fetch('/api/new-question')).json()
+    const counter = getLocalCounterAndIncrement()
+    const response = await (await fetch(`/api/new-question?c=${counter}`)).json()
     router.push(`/question/${response.questionId}`)
     setGuesses(initialState())
   }
