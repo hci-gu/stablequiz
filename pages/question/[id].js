@@ -44,6 +44,25 @@ const initialState = () => [
   { value: null, correct: null },
 ]
 
+const SubmitButton = ({ submit, disabled, variant, children }) => {
+  const [loading, setLoading] = useState(false)
+
+  return (
+    <Button
+      onClick={async () => {
+        setLoading(true)
+        await submit()
+        setLoading(false)
+      }}
+      loading={loading}
+      disabled={disabled}
+      variant={variant}
+    >
+      {children}
+    </Button>
+  )
+}
+
 export default function Question({ question, people = [] }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -67,6 +86,7 @@ export default function Question({ question, people = [] }) {
         guess1: guesses[0].value ?? '',
         guess2: guesses[1].value ?? '',
         guess3: guesses[2].value ?? '',
+        hints: showHints ? hints : [],
         counter,
       }),
     })
@@ -190,40 +210,46 @@ export default function Question({ question, people = [] }) {
             ))}
           </Flex>
           {showHints && (
-            <Flex
-              direction="column"
-              align="center"
-              >
-                {hints.map((hint, index) => (
-                  <Container key={`hint_${index}`} sx={{
+            <Flex direction="column" align="center">
+              {hints.map((hint, index) => (
+                <Container
+                  key={`hint_${index}`}
+                  sx={{
                     fontStyle: 'italic',
                     marginBottom: '1em',
-                  }}>{hint}</Container>
-                ))}
-              </Flex>
+                  }}
+                >
+                  {hint}
+                </Container>
+              ))}
+            </Flex>
           )}
           <Flex gap="xs">
             {!isDone && !showHints && (
-              <Button onClick={loadHints} variant="outline" loading={loadingHints}>
+              <Button
+                onClick={loadHints}
+                variant="outline"
+                loading={loadingHints}
+              >
                 Hints
               </Button>
             )}
             {!isDone && showHints && (
-              <Button onClick={submit} variant="outline">
+              <SubmitButton submit={submit} variant="outline">
                 Give up
-              </Button>
+              </SubmitButton>
             )}
             {isDone ? (
               <Button onClick={next}>
                 {isCorrect ? 'Next person' : 'New person'}
               </Button>
             ) : (
-              <Button
-                onClick={submit}
+              <SubmitButton
+                submit={submit}
                 disabled={!guesses.every((g) => g.value)}
               >
                 Submit
-              </Button>
+              </SubmitButton>
             )}
           </Flex>
 

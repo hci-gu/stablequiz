@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   const guess1 = req.body.guess1.toLowerCase()
   const guess2 = req.body.guess2.toLowerCase()
   const guess3 = req.body.guess3.toLowerCase()
+  const hints = req.body.hints
   const counter = parseInt(req.body.counter)
   const question = getQuestion(questionId)
   const answers = question.people.map((p) => p.toLowerCase())
@@ -15,10 +16,11 @@ export default async function handler(req, res) {
       'https://analytics.prod.appadem.in/whoamai/guess/data',
       {
         questionId,
+        date: new Date(),
         guess1,
         guess2,
         guess3,
-        date: new Date(),
+        hints,
         counter,
       },
       {
