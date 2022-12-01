@@ -16,7 +16,7 @@ import { getQuestion } from '../../lib/questions'
 import Head from 'next/head'
 import GuessInput from '../../components/GuessInput'
 import CopyLinkButton from '../../components/CopyLinkButton'
-import { getLocalCounterAndIncrement } from '../../lib/utils'
+import { getLocalCounter, getLocalCounterAndIncrement } from '../../lib/utils'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -53,6 +53,7 @@ export default function Question({ question, people = [] }) {
   const isDone = guesses.every((guess) => guess.answer)
 
   const submit = async () => {
+    const counter = getLocalCounter()
     const response = await fetch('/api/submit-answer', {
       method: 'POST',
       headers: {
@@ -63,6 +64,7 @@ export default function Question({ question, people = [] }) {
         guess1: guesses[0].value ?? '',
         guess2: guesses[1].value ?? '',
         guess3: guesses[2].value ?? '',
+        counter,
       }),
     })
     const data = await response.json()
@@ -90,7 +92,9 @@ export default function Question({ question, people = [] }) {
   const next = async () => {
     setLoading(true)
     const counter = getLocalCounterAndIncrement()
-    const response = await (await fetch(`/api/new-question?c=${counter}`)).json()
+    const response = await (
+      await fetch(`/api/new-question?c=${counter}`)
+    ).json()
     router.push(`/question/${response.questionId}`)
     setGuesses(initialState())
   }
@@ -135,6 +139,7 @@ export default function Question({ question, people = [] }) {
             }}
           >
             <Image
+              alt="AI generated image of three separate famous people"
               src={question.image}
               radius="lg"
               withPlaceholder
@@ -191,7 +196,7 @@ export default function Question({ question, people = [] }) {
             )}
           </Flex>
 
-          <CopyLinkButton questionId={question.questionId}/>
+          <CopyLinkButton questionId={question.questionId} />
         </Flex>
       </Center>
     </>
