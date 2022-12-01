@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const answers = question.people.map((p) => p.toLowerCase())
 
   try {
-    axios.post(
+    await axios.post(
       'https://analytics.prod.appadem.in/whoamai/guess/data',
       {
         questionId,
