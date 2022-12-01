@@ -48,6 +48,9 @@ export default function Question({ question, people = [] }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [guesses, setGuesses] = useState(initialState())
+  const [showHints, setShowHints] = useState(false)
+  const [loadingHints, setLoadingHints] = useState(false)
+  const [hints, setHints] = useState([])
 
   const isCorrect = guesses.every((guess) => guess.correct)
   const isDone = guesses.every((guess) => guess.answer)
@@ -91,12 +94,22 @@ export default function Question({ question, people = [] }) {
 
   const next = async () => {
     setLoading(true)
+    setShowHints(false)
     const counter = getLocalCounterAndIncrement()
     const response = await (
       await fetch(`/api/new-question?c=${counter}`)
     ).json()
     router.push(`/question/${response.questionId}`)
     setGuesses(initialState())
+  }
+
+  const loadHints = async () => {
+    setLoadingHints(true)
+    const response = await fetch(`/api/get-hints?id=${question.questionId}`)
+    const data = await response.json()
+    setHints(data.hints)
+    setLoadingHints(false)
+    setShowHints(true)
   }
 
   return (
@@ -176,8 +189,26 @@ export default function Question({ question, people = [] }) {
               />
             ))}
           </Flex>
+          {showHints && (
+            <Flex
+              direction="column"
+              align="center"
+              >
+                {hints.map((hint, index) => (
+                  <Container key={`hint_${index}`} sx={{
+                    fontStyle: 'italic',
+                    marginBottom: '1em',
+                  }}>{hint}</Container>
+                ))}
+              </Flex>
+          )}
           <Flex gap="xs">
-            {!isDone && (
+            {!isDone && !showHints && (
+              <Button onClick={loadHints} variant="outline" loading={loadingHints}>
+                Hints
+              </Button>
+            )}
+            {!isDone && showHints && (
               <Button onClick={submit} variant="outline">
                 Give up
               </Button>
