@@ -1,4 +1,5 @@
 import { getQuestion } from '../../lib/questions'
+import axios from 'axios'
 
 export default async function handler(req, res) {
   const questionId = req.body.questionId
@@ -10,21 +11,22 @@ export default async function handler(req, res) {
   const answers = question.people.map((p) => p.toLowerCase())
 
   try {
-    fetch('https://analytics.prod.appadem.in/whoamai/guess/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANALYTICS_API_KEY,
-      },
-      body: JSON.stringify({
+    axios.post(
+      'https://analytics.prod.appadem.in/whoamai/guess/data',
+      {
         questionId,
         guess1,
         guess2,
         guess3,
         date: new Date(),
         counter,
-      }),
-    })
+      },
+      {
+        headers: {
+          'x-api-key': process.env.ANALYTICS_API_KEY,
+        },
+      }
+    )
   } catch (e) {}
 
   const correct =
