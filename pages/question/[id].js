@@ -139,6 +139,7 @@ export default function Question({ question, people = [] }) {
             }}
           >
             <Image
+              alt="AI generated image of three separate famous people"
               src={question.image}
               radius="lg"
               withPlaceholder
